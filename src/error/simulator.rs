@@ -1,36 +1,39 @@
 use std::fmt::{Display, Formatter};
-use std::fs::Permissions;
 use crate::error::lib::LibError;
 
 #[derive(PartialEq, Debug, Clone)]
-pub enum FsError {
-    CannotGetTempDir,
-    CannotCreateFile { file_path: String },
-    CannotWriteBytesToFile { file_path: String, bytes: Vec<u8> },
-    CannotSetPermissionsToFile { file_path: String, permissions: Permissions }
+pub enum SimulatorError {
+    StdoutAlreadyConsumed,
+    ProcessAlreadyFinished,
+    ProcessExitedWithErrorCode { code: Option<i32> },
+    CannotConvertConfigToTOML,
 }
 
-impl Display for FsError {
+impl Display for SimulatorError {
     fn fmt(&self, f: &mut Formatter<'_>) -> std::fmt::Result {
         match self {
-            FsError::CannotGetTempDir => {
-                write!(f, "Cannot get a temporary directory")
+            SimulatorError::StdoutAlreadyConsumed => {
+                write!(f, "Simulator's stdout has been already used.")
             },
-            FsError::CannotCreateFile { file_path } => {
-              write!(f, "Cannot create a file at the specified path: {file_path}")
+            SimulatorError::ProcessAlreadyFinished => {
+                write!(f, "Simulator already ended.")
             },
-            FsError::CannotWriteBytesToFile { file_path, bytes } => {
-                write!(f, "Cannot write bytes of length {} in {file_path}", bytes.len())
+            SimulatorError::ProcessExitedWithErrorCode { code } => {
+                if let Some(code) = code {
+                    write!(f, "Simulator exited with error code {code}.")
+                } else {
+                    write!(f, "Simulator exited without error code.")
+                }
             },
-            FsError::CannotSetPermissionsToFile { file_path, permissions } => {
-                write!(f, "Cannot set permissions {:?} to file {file_path}", permissions)
+            SimulatorError::CannotConvertConfigToTOML => {
+                write!(f, "Cannot convert config to TOML.")
             },
         }
     }
 }
 
-impl From<FsError> for LibError {
-    fn from(value: FsError) -> Self {
-        LibError::Fs(value)
+impl From<SimulatorError> for LibError {
+    fn from(value: SimulatorError) -> Self {
+        LibError::Simulator(value)
     }
 }

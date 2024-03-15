@@ -1,32 +1,27 @@
 use std::fmt::{Display, Formatter};
-use std::fs::Permissions;
 use crate::error::lib::LibError;
 
 #[derive(PartialEq, Debug, Clone)]
-pub enum FsError {
-    CannotCreateFile { file_path: String },
-    CannotWriteBytesToFile { file_path: String, bytes: Vec<u8> },
-    CannotSetPermissionsToFile { file_path: String, permissions: Permissions }
+pub enum ProcessError {
+    CannotSpawnProcess,
+    CannotCopyAssets
 }
 
-impl Display for FsError {
+impl Display for ProcessError {
     fn fmt(&self, f: &mut Formatter<'_>) -> std::fmt::Result {
         match self {
-            FsError::CannotCreateFile { file_path } => {
-              write!(f, "Cannot create a file at the specified path: {file_path}")
+            ProcessError::CannotSpawnProcess => {
+              write!(f, "Cannot spawn process")
             },
-            FsError::CannotWriteBytesToFile { file_path, bytes } => {
-                write!(f, "Cannot write bytes of length {} in {file_path}", bytes.len())
+            ProcessError::CannotCopyAssets => {
+                write!(f, "Cannot copy chain simulator assets")
             },
-            FsError::CannotSetPermissionsToFile { file_path, permissions } => {
-                write!(f, "Cannot set permissions {:?} to file {file_path}", permissions)
-            }
         }
     }
 }
 
-impl From<FsError> for LibError {
-    fn from(value: FsError) -> Self {
-        LibError::Fs(value)
+impl From<ProcessError> for LibError {
+    fn from(value: ProcessError) -> Self {
+        LibError::Process(value)
     }
 }
