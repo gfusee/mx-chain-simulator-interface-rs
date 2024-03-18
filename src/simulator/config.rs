@@ -50,8 +50,6 @@ impl SimulatorConfig {
 
         let toml_bytes = toml_string.as_bytes().to_vec();
 
-        println!("{}", toml_string);
-
         Ok(toml_bytes)
     }
 }

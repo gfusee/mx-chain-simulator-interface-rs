@@ -3,6 +3,8 @@ use crate::error::lib::LibError;
 
 #[derive(PartialEq, Debug, Clone)]
 pub enum SimulatorError {
+    CannotKillProcess,
+    ProcessNotStarted,
     StdoutAlreadyConsumed,
     ProcessAlreadyFinished,
     ProcessExitedWithErrorCode { code: Option<i32> },
@@ -12,6 +14,12 @@ pub enum SimulatorError {
 impl Display for SimulatorError {
     fn fmt(&self, f: &mut Formatter<'_>) -> std::fmt::Result {
         match self {
+            SimulatorError::CannotKillProcess => {
+                write!(f, "Cannot kill the simulator's process.")
+            },
+            SimulatorError::ProcessNotStarted => {
+                write!(f, "Simulator is not started. Please start it using the .start() method.")
+            },
             SimulatorError::StdoutAlreadyConsumed => {
                 write!(f, "Simulator's stdout has been already used.")
             },

@@ -2,6 +2,7 @@ use std::{fs, io};
 use std::fs::{File, Permissions};
 use std::io::Write;
 use std::path::{Path, PathBuf};
+use include_dir::Dir;
 use tempfile::{tempdir, TempDir};
 use crate::error::fs::FsError;
 use crate::error::lib::LibError;
@@ -52,21 +53,18 @@ pub(crate) fn write_bytes_to_temp_file(
     Ok(temp_file_path)
 }
 
-pub(crate) fn copy_dir_all(src: impl AsRef<Path>, dst: impl AsRef<Path>) -> io::Result<()> {
-    if !src.as_ref().exists() {
-        dbg!(src.as_ref());
-        return Err(io::Error::new(io::ErrorKind::NotFound, "Source directory not found"));
+pub(crate) fn copy_dir_all(src: &Dir, dst: impl AsRef<Path>) -> io::Result<()> {
+    fs::create_dir_all(&dst)?;
+
+    for entry in src.files() {
+        let file_dst = dst.as_ref().join(entry.path().file_name().unwrap());
+        fs::write(file_dst, entry.contents())?;
     }
 
-    fs::create_dir_all(&dst)?;
-    for entry in fs::read_dir(src)? {
-        let entry = entry?;
-        let ty = entry.file_type()?;
-        if ty.is_dir() {
-            copy_dir_all(entry.path(), dst.as_ref().join(entry.file_name()))?;
-        } else {
-            fs::copy(entry.path(), dst.as_ref().join(entry.file_name()))?;
-        }
+    for dir in src.dirs() {
+        let next_dst = dst.as_ref().join(dir.path().file_name().unwrap());
+        copy_dir_all(dir, next_dst)?;
     }
+
     Ok(())
 }
