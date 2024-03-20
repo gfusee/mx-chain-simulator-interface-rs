@@ -8,7 +8,11 @@ include = ["assets/**/*"]
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
+tokio = {  version = "1.36.0", features = ["full"] }
 serde = { version = "1.0.197", features = ["derive"] }
+serde_json = "1.0.114"
+reqwest = "0.11.27"
 toml = "0.8.11"
 tempfile = "3.10.1"
 include_dir = "0.7.3"
+nix = { version = "0.28.0", features = ["signal"] }

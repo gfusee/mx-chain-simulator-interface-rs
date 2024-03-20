@@ -7,7 +7,7 @@ pub enum SimulatorError {
     ProcessNotStarted,
     StdoutAlreadyConsumed,
     ProcessAlreadyFinished,
-    ProcessExitedWithErrorCode { code: Option<i32> },
+    ProcessExitedWithErrorCode { code: Option<i32>, signal: Option<i32> },
     CannotConvertConfigToTOML,
 }
 
@@ -26,9 +26,9 @@ impl Display for SimulatorError {
             SimulatorError::ProcessAlreadyFinished => {
                 write!(f, "Simulator already ended.")
             },
-            SimulatorError::ProcessExitedWithErrorCode { code } => {
+            SimulatorError::ProcessExitedWithErrorCode { code, signal } => {
                 if let Some(code) = code {
-                    write!(f, "Simulator exited with error code {code}.")
+                    write!(f, "Simulator exited with error code {code:#?} and signal: {signal:#?}.")
                 } else {
                     write!(f, "Simulator exited without error code.")
                 }

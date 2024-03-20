@@ -1,13 +1,15 @@
 use std::fmt::{Display, Formatter};
 use crate::error::fs::FsError;
 use crate::error::process::ProcessError;
+use crate::error::requests::generate_blocks::GenerateBlocksError;
 use crate::error::simulator::SimulatorError;
 
 #[derive(PartialEq, Debug, Clone)]
 pub enum LibError {
     Fs(FsError),
     Process(ProcessError),
-    Simulator(SimulatorError)
+    Simulator(SimulatorError),
+    GenerateBlocks(GenerateBlocksError)
 }
 
 impl Display for LibError {
@@ -20,6 +22,9 @@ impl Display for LibError {
                 error.fmt(f)
             },
             LibError::Simulator(error) => {
+                error.fmt(f)
+            },
+            LibError::GenerateBlocks(error) => {
                 error.fmt(f)
             }
         }

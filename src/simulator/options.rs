@@ -1,9 +1,10 @@
 use crate::simulator::config::SimulatorConfig;
 
+#[derive(Copy, Clone)]
 pub struct SimulatorOptions {
-    server_port: u16,
-    num_of_shards: u64,
-    bypass_txs_signature: bool
+    pub(crate) server_port: u16,
+    pub(crate) num_of_shards: u64,
+    pub(crate) bypass_txs_signature: bool
 }
 
 impl SimulatorOptions {
