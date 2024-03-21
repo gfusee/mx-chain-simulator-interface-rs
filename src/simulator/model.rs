@@ -1,3 +1,4 @@
+use std::collections::HashMap;
 use std::sync::Arc;
 
 use nix::Error;
@@ -9,10 +10,12 @@ use tokio::sync::Mutex;
 
 use crate::error::lib::LibError;
 use crate::error::requests::generate_blocks::GenerateBlocksError;
+use crate::error::requests::set_address_keys::SetAddressKeysError;
 use crate::error::simulator::SimulatorError;
 use crate::simulator::config::SimulatorConfig;
 use crate::simulator::process::SimulatorProcess;
 use crate::simulator::requests::generate_blocks::GenerateBlocksResponse;
+use crate::simulator::requests::set_address_keys::SetAddressKeysResponse;
 use crate::SimulatorOptions;
 use crate::utils::fs::get_temp_dir;
 use crate::utils::process::{prepare_temp_dir_for_simulator, spawn_simulator_process};
@@ -97,6 +100,54 @@ impl Simulator {
 
         if result.code != "successful" {
             return Err(GenerateBlocksError::ResponseCodeIsNotSuccessful { url, code: result.code }.into());
+        }
+
+        Ok(())
+    }
+
+    pub async fn set_address_keys(&self, address: &str, keys: HashMap<String, String>) -> Result<(), LibError> {
+        let opt_process_and_options = self.process_id_and_options.lock().await;
+
+        let Some((process_id, options)) = opt_process_and_options.as_ref() else {
+            return Err(SimulatorError::ProcessNotStarted.into());
+        };
+
+        if !is_process_running(*process_id) {
+            return Err(SimulatorError::ProcessAlreadyFinished.into());
+        }
+
+        let options = *options;
+        drop(opt_process_and_options);
+
+        let url = format!("http://localhost:{}/simulator/address/{}/set-state", options.server_port, address);
+
+        let Ok(body) = serde_json::to_string(&keys) else {
+            todo!()
+        };
+
+        let Ok(response) = Client::new()
+            .post(&url)
+            .body(body)
+            .send()
+            .await
+            else {
+                return Err(SetAddressKeysError::CannotGetTextFromTheResponse { url }.into());
+            };
+
+        if !response.status().is_success() {
+            return Err(SetAddressKeysError::ResponseStatusIsNotSuccessful { url, status: response.status().as_u16() }.into());
+        }
+
+        let Ok(text) = response.text().await else {
+            return Err(SetAddressKeysError::CannotGetTextFromTheResponse { url }.into());
+        };
+
+        let Ok(result) = serde_json::from_str::<SetAddressKeysResponse>(&text) else {
+            return Err(SetAddressKeysError::FailedToParseTheResponse { url, response: text }.into());
+        };
+
+        if result.code != "successful" {
+            return Err(SetAddressKeysError::ResponseCodeIsNotSuccessful { url, code: result.code }.into());
         }
 
         Ok(())

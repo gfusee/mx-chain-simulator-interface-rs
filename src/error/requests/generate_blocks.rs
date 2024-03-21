@@ -20,7 +20,7 @@ impl Display for GenerateBlocksError {
                 write!(f, "Generate blocks response's status is not successful: {status}, url: {url}")
             },
             GenerateBlocksError::CannotGetTextFromTheResponse  { url } => {
-                write!(f, "No text received in the generate blocks request. Url: {url}")
+                write!(f, "No text received in the generate blocks response. Url: {url}")
             },
             GenerateBlocksError::FailedToParseTheResponse { url, response } => {
                 write!(f, "Cannot parse the received generate blocks response: {response}, url: {url}")
