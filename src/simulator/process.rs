@@ -37,6 +37,11 @@ impl SimulatorProcess {
             if exit_status.success() {
                 return Ok(());
             } else {
+                if exit_status.signal() == Some(9) {
+                    println!("Process has been killed.");
+                    return Ok(())
+                }
+
                 return Err(SimulatorError::ProcessExitedWithErrorCode { code: exit_status.code(), signal: exit_status.signal() }.into());
             }
         }

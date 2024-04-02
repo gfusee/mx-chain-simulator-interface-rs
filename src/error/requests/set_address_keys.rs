@@ -31,7 +31,7 @@ impl Display for SetAddressKeysError {
                 write!(f, "Set address keys response's code is not successful: {code}, url: {url}")
             },
             SetAddressKeysError::CannotConvertKeysAsJSON { url, keys } => {
-                write!(f, "Error while creating the body for POST {url}, keys: {keys:?}")
+                write!(f, "Error while creating the set address keys keys body for POST {url}, keys: {keys:?}")
             },
         }
     }

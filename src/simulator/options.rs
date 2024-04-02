@@ -1,10 +1,13 @@
+use std::time::Duration;
 use crate::simulator::config::SimulatorConfig;
 
 #[derive(Copy, Clone)]
 pub struct SimulatorOptions {
     pub(crate) server_port: u16,
     pub(crate) num_of_shards: u64,
-    pub(crate) bypass_txs_signature: bool
+    pub(crate) rounds_per_epoch: u64,
+    pub(crate) bypass_txs_signature: bool,
+    pub(crate) block_autogenerate_duration: Option<Duration>
 }
 
 impl SimulatorOptions {
@@ -24,8 +27,20 @@ impl SimulatorOptions {
         self
     }
 
+    pub fn with_rounds_per_epoch(mut self, rounds_per_epoch: u64) -> Self {
+        self.rounds_per_epoch = rounds_per_epoch;
+
+        self
+    }
+
     pub fn bypass_transactions_signature(mut self) -> Self {
         self.bypass_txs_signature = true;
+
+        self
+    }
+
+    pub fn with_block_autogeneration(mut self, each: Duration) -> Self {
+        self.block_autogenerate_duration = Some(each);
 
         self
     }
@@ -39,6 +54,9 @@ impl SimulatorOptions {
         result.push("--num-of-shards".to_string());
         result.push(self.num_of_shards.to_string());
 
+        result.push("--rounds-per-epoch".to_string());
+        result.push(self.rounds_per_epoch.to_string());
+
         result.push("--bypass-txs-signature".to_string());
         result.push(self.bypass_txs_signature.to_string());
 
@@ -51,7 +69,9 @@ impl Default for SimulatorOptions {
         Self {
             server_port: 8085,
             num_of_shards: 3,
+            rounds_per_epoch: 20,
             bypass_txs_signature: false,
+            block_autogenerate_duration: None
         }
     }
 }

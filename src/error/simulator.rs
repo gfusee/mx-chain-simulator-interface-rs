@@ -4,6 +4,7 @@ use crate::error::lib::LibError;
 #[derive(PartialEq, Debug, Clone)]
 pub enum SimulatorError {
     CannotKillProcess,
+    TimedOutWhileWaitingToBeReady,
     ProcessNotStarted,
     StdoutAlreadyConsumed,
     ProcessAlreadyFinished,
@@ -16,6 +17,9 @@ impl Display for SimulatorError {
         match self {
             SimulatorError::CannotKillProcess => {
                 write!(f, "Cannot kill the simulator's process.")
+            },
+            SimulatorError::TimedOutWhileWaitingToBeReady => {
+                write!(f, "Timed out while waiting to be ready.")
             },
             SimulatorError::ProcessNotStarted => {
                 write!(f, "Simulator is not started. Please start it using the .start() method.")

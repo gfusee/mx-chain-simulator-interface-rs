@@ -1,43 +1,25 @@
-use std::collections::HashMap;
 use std::time::Duration;
 use mx_chain_simulator_interface_rs::{Simulator, SimulatorOptions};
 
 #[tokio::main]
 async fn main() {
-    let options = SimulatorOptions::new()
-        .with_num_of_shards(3);
-
     let simulator = Simulator::new().unwrap();
-    let process = simulator.start(options).await.unwrap();
+    let process = simulator.start(
+        SimulatorOptions::new()
+            .with_num_of_shards(2)
+            .with_block_autogeneration(Duration::from_secs(2))
+    ).await.unwrap();
 
-    {
-        let simulator = simulator.clone();
-        tokio::spawn(async move {
-           loop {
-               tokio::time::sleep(Duration::from_secs(6)).await;
+    let first_handle = tokio::spawn(async move {
+        process.listen().unwrap();
+    });
 
-               let simulator = simulator.clone();
-               {
-                   tokio::spawn(async move {
-                       simulator.generate_blocks(1).await.unwrap();
-                   });
-               }
-           }
-        });
-    }
+    let second_handle = tokio::spawn(async move {
+        tokio::time::sleep(Duration::from_secs(10)).await;
 
-    println!("Waiting...");
-    tokio::time::sleep(Duration::from_secs(6)).await;
+        drop(simulator);
+    });
 
-    simulator.set_address_keys(
-        "erd1vzujz260zt3laaftpythvy46lj320fky9mtn2m6503dmjwv8np3sn8emmq",
-        HashMap::from([
-            ("01".to_string(), "01".to_string()),
-            ("0102".to_string(), "1a".to_string())
-        ])
-    )
-        .await
-        .unwrap();
-
-    process.listen().unwrap();
+    first_handle.await.unwrap();
+    second_handle.await.unwrap();
 }
