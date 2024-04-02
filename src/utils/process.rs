@@ -11,7 +11,7 @@ use crate::utils::fs::{copy_dir_all, write_bytes_to_temp_file};
 const CHAIN_SIMULATOR_NAME: &str = "chainsimulator";
 const CHAIN_SIMULATOR_DARWIN_AMD64_NAME: &str = "chainsimulator_darwin_amd64";
 const CHAIN_SIMULATOR_LINUX_AMD64_NAME: &str = "chainsimulator_linux_amd64";
-const LIBWASMER_LINUX_AMD64_NAME: &str = "libwasmer_linux_amd64.do";
+const LIBWASMER_LINUX_AMD64_NAME: &str = "libwasmer_linux_amd64.so";
 const LIBWASMER_DARWIN_AMD64_NAME: &str = "libwasmer_darwin_amd64.dylib";
 
 const CONFIG_FOLDER: &str = "config";
