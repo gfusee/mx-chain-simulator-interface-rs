@@ -1,9 +1,14 @@
 [package]
 name = "mx-chain-simulator-interface-rs"
-version = "0.1.0"
+version = "0.0.1"
+description = "A Rust wrapper around the MultiversX chain simulator CLI"
+repository = "https://github.com/gfusee/mx-chain-simulator-interface-rs"
 edition = "2021"
 include = ["assets/**/*"]
-
+exclude = ["main.rs"]
+categories = ["cryptography::cryptocurrencies"]
+license = "GPL-3"
+keywords = ["multiversx", "localnet", "blockchain", "testnet", "simulator"]
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 

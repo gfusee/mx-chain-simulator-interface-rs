@@ -438,7 +438,7 @@ dependencies = [
 
 [[package]]
 name = "mx-chain-simulator-interface-rs"
-version = "0.1.0"
+version = "0.0.1"
 dependencies = [
  "include_dir",
  "nix",

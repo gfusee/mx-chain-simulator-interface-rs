@@ -18,6 +18,8 @@ pub enum LibError {
     SetState(SetStateError),
 }
 
+impl std::error::Error for LibError {}
+
 impl Display for LibError {
     fn fmt(&self, f: &mut Formatter<'_>) -> std::fmt::Result {
         match self {
