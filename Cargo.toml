@@ -5,7 +5,6 @@ description = "A Rust wrapper around the MultiversX chain simulator CLI"
 repository = "https://github.com/gfusee/mx-chain-simulator-interface-rs"
 edition = "2021"
 include = ["assets/**/*"]
-exclude = ["main.rs"]
 categories = ["cryptography::cryptocurrencies"]
 license = "GPL-3"
 keywords = ["multiversx", "localnet", "blockchain", "testnet", "simulator"]
