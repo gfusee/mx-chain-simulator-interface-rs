@@ -57,7 +57,6 @@ where
 }
 
 fn copy_dir_recursive(src: &Path, dst: &Path) -> io::Result<()> {
-    println!("Path: {} to {}", src.to_str().unwrap(), dst.to_str().unwrap());
     if !dst.exists() {
         fs::create_dir_all(dst)?;
     }
