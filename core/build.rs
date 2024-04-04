@@ -47,7 +47,7 @@ fn download_assets(out_dir: &Path) {
 
     #[cfg(all(target_os = "linux", target_arch = "x86_64"))]
         let (chain_simulator_bin_name, libwasmer_name) = (
-            CHAIN_SIMULATOR_DARWIN_AMD64_NAME,
+            CHAIN_SIMULATOR_LINUX_AMD64_NAME,
             LIBWASMER_LINUX_AMD64_NAME
         );
     #[cfg(all(target_os = "macos", any(target_arch = "x86_64", target_arch = "aarch64")))]
