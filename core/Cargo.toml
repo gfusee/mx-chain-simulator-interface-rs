@@ -6,7 +6,7 @@ repository = "https://github.com/gfusee/mx-chain-simulator-interface-rs"
 edition = "2021"
 include = ["src", "build.rs"]
 categories = ["cryptography::cryptocurrencies"]
-license = "GPL-3"
+license = "GPL-3.0-only"
 keywords = ["multiversx", "localnet", "blockchain", "testnet", "simulator"]
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html

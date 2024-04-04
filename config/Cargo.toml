@@ -6,5 +6,5 @@ repository = "https://github.com/gfusee/mx-chain-simulator-interface-rs"
 edition = "2021"
 include = ["src", "build.rs", "assets/**/*"]
 categories = ["cryptography::cryptocurrencies"]
-license = "GPL-3"
+license = "GPL-3.0-only"
 keywords = ["multiversx", "localnet", "blockchain", "testnet", "simulator"]
