@@ -542,10 +542,16 @@ name = "mx-chain-simulator-interface-config-rs"
 version = "0.0.1"
 
 [[package]]
+name = "mx-chain-simulator-interface-config-rs"
+version = "0.0.1"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "fdb3ea5280fd48a042819778550f16218575e405cf2be547dcc3c5861bccde97"
+
+[[package]]
 name = "mx-chain-simulator-interface-rs"
 version = "0.0.1"
 dependencies = [
- "mx-chain-simulator-interface-config-rs",
+ "mx-chain-simulator-interface-config-rs 0.0.1 (registry+https://github.com/rust-lang/crates.io-index)",
  "nix",
  "reqwest 0.11.27",
  "reqwest 0.12.2",

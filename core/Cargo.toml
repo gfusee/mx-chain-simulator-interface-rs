@@ -22,4 +22,4 @@ nix = { version = "0.28.0", features = ["signal"] }
 
 [build-dependencies]
 reqwest = { version = "0.12.2", features = ["blocking"] }
-mx-chain-simulator-interface-config-rs = { path = "../config" }
+mx-chain-simulator-interface-config-rs = "0.0.1"
